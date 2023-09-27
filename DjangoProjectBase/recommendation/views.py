@@ -23,13 +23,33 @@ def recommendation(request):
         sim = np.array(sim)
         idx = np.argmax(sim)
         
+        lista_movies_puntajes = []
+
+        for i in range(len(sim)):
+            if sim[i] > 0.825:
+                lista_movies_puntajes.append({'movie':movies[i] , 'puntaje':sim[i]})
+
+        lista_ordenada_movie_puntajes = sorted(lista_movies_puntajes, key=lambda x: x["puntaje"], reverse=True)
+
+        lista_ordenada_movies = []
+        for i in lista_ordenada_movie_puntajes:
+            lista_ordenada_movies.append(i['movie'])
+
+        return render(request, 'recommendation.html', {'movies': lista_ordenada_movies})
+
+
+        '''
         recommended_movie = []
 
         for i in range(len(sim)):
-            if sim[i] > 0.83:
+            if sim[i] > 0.825:
                 recommended_movie.append(movies[i])
 
+
+        recommended_movie = sorted(recommended_movie, reverse=True)
         return render(request, 'recommendation.html', {'movies': recommended_movie})
+        '''
+        
 
     else:
         return render(request, 'recommendation.html')
